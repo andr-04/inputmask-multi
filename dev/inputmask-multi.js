@@ -1,7 +1,13 @@
 /*
- *Requriements:
- *  jquery/inputmask/jquery.inputmask.js
- *  jquery/jquery.bind-first.js
+ * @license Multi Input Mask plugin for jquery
+ * https://github.com/andr-04/inputmask-multi
+ * Copyright (c) 2012 Andrey Egorov
+ * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
+ * Version: 1.0.0
+ * 
+ * Requriements:
+ * https://github.com/RobinHerbots/jquery.inputmask
+ * https://github.com/private-face/jquery.bind-first
  */
 (function ($) {
     $.masksLoad = function(url) {
