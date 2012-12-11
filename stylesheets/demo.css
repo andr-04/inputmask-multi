@@ -1,0 +1,19 @@
+/* 
+    Document   : demo
+    Created on : 12.12.2012, 1:49:58
+    Author     : andrey
+    Description:
+        Display demo field.
+*/
+
+.demo { 
+    margin: 10px 60px;
+}
+
+.demo input { 
+    font-size: 38px;
+}
+
+.demo label {
+    color: brown;
+}
