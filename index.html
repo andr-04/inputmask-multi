@@ -80,9 +80,9 @@
 						
                             $('#phone_mask').change(function() {
                                 if ($('#phone_mask').is(':checked')) {
-                                    $('#customer_phone').inputmasks(maskOpts, false);
+                                    $('#customer_phone').inputmasks(maskOpts);
                                 } else {
-                                    $('#customer_phone').inputmask("+[###############]", maskOpts.inputmask)
+                                    $('#customer_phone').inputmask("+[####################]", maskOpts.inputmask)
                                     .attr("placeholder", $('#customer_phone').inputmask("getemptymask"));
                                 }
                             });
