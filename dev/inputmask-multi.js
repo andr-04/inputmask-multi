@@ -190,7 +190,7 @@
 		
         var caretApply = function(oldMask, newMask, oldPos) {
             if (!oldMask) {
-            	return 0;
+                return 0;
             }
             var pos = 0, startPos = 0;
             for (; pos < oldPos.begin; pos++) {
@@ -217,34 +217,33 @@
             }
             endPos = pos;
             return {
-            	begin: startPos,
-            	end: endPos
+                begin: startPos,
+                end: endPos
             };
         }
 	
-		var maskUnbind = function() {
-				$(this)
-				.unbind("keypress.inputmask", masksKeyPress)
-				.unbind(pasteEvent + ".inputmask", masksPaste)
-				.unbind("dragdrop.inputmask", masksPaste)
-				.unbind("drop.inputmask", masksPaste)
-				.unbind("keydown.inputmask", masksKeyDown)
-				.unbind("change.inputmask", masksChange)
-				.unbind("setvalue.inputmask", masksSetValue)
-				.unbind("blur.inputmask", masksChange);
-		}
+        var maskUnbind = function() {
+            $(this)
+            .unbind("keypress.inputmask", masksKeyPress)
+            .unbind(pasteEvent + ".inputmask", masksPaste)
+            .unbind("dragdrop.inputmask", masksPaste)
+            .unbind("drop.inputmask", masksPaste)
+            .unbind("keydown.inputmask", masksKeyDown)
+            .unbind("setvalue.inputmask", masksSetValue)
+            .unbind("blur.inputmask", masksChange);
+        }
 		
-		var maskRebind = function() {
-			maskUnbind.call(this);
-				$(this)
-				.bindFirst("keypress.inputmask", masksKeyPress)
-				.bindFirst(pasteEvent + ".inputmask", masksPaste)
-				.bindFirst("dragdrop.inputmask", masksPaste)
-				.bindFirst("drop.inputmask", masksPaste)
-				.bindFirst("keydown.inputmask", masksKeyDown)
-				.bindFirst("setvalue.inputmask", masksSetValue)
-				.bind("blur.inputmask", masksChange);
-		}
+        var maskRebind = function() {
+            maskUnbind.call(this);
+            $(this)
+            .bindFirst("keypress.inputmask", masksKeyPress)
+            .bindFirst(pasteEvent + ".inputmask", masksPaste)
+            .bindFirst("dragdrop.inputmask", masksPaste)
+            .bindFirst("drop.inputmask", masksPaste)
+            .bindFirst("keydown.inputmask", masksKeyDown)
+            .bindFirst("setvalue.inputmask", masksSetValue)
+            .bind("blur.inputmask", masksChange);
+        }
 		
         var maskApply = function(match, newtext) {
             if (match && (newtext || match.mask != oldmatch.mask)) {
@@ -259,7 +258,9 @@
                         this.value = newtext;
                     }
                 }
-                $(this).inputmask(match.mask, $.extend(true, maskOpts.inputmask, {insertMode: insertMode}));
+                $(this).inputmask(match.mask, $.extend(true, maskOpts.inputmask, {
+                    insertMode: insertMode
+                }));
                 if (!newtext) {
                     caret.call(this, caretPos.begin, caretPos.end);
                 }
@@ -308,7 +309,7 @@
                 return keyboardApply.call(this, e, text, false);
             }
             if (k == 45) { // insert
-            	insertMode = !insertMode;
+                insertMode = !insertMode;
             }
             return true;
         }
