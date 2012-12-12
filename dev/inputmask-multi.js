@@ -72,7 +72,7 @@
         return maskList;
     }
 
-    $.fn.inputmasks = function(maskOpts, strict) {
+    $.fn.inputmasks = function(maskOpts, mode) {
         //Helper Functions
         var isInputEventSupported = function(eventName) {
             var el = document.createElement('input'),
@@ -176,11 +176,13 @@
                     }
                 }
                 if (pass && it==mtxt.length) {
-                    var completed = mask.substr(im).search(maskOpts.match) == -1;
+                    var determined = mask.substr(im).search(maskOpts.match) == -1;
                     mask = mask.replace(new RegExp(maskOpts.match.source, 'g'), maskOpts.replace);
+                    var completed = mask.substr(im).search(maskOpts.replace) == -1;
                     return {
                         mask: mask,
                         obj: maskOpts.list[mid],
+                        determined: determined,
                         completed: completed
                     };
                 }
@@ -266,13 +268,13 @@
                 }
             }
             oldmatch = match;
-            maskOpts.onMaskChange.call(this, match.obj, match.completed);
+            maskOpts.onMaskChange.call(this, match.obj, match.determined);
             return true;
         }
         
         var keyboardApply = function(e, text, insert) {
             var match = maskMatch(text);
-            if (!match || match.obj != oldmatch.obj || match.completed != oldmatch.completed) {
+            if (!match || match.obj != oldmatch.obj || match.determined != oldmatch.determined) {
                 if (match) {
                     maskUnbind.call(this);
                     if (insert) {
@@ -361,15 +363,15 @@
             return true;
         }
 
-        if (typeof strict == "undefined" || strict == true) {
-            this.each(function () {
-                maskInit.call(this);
-            });
-        }
-        if (typeof strict != "undefined") {
-            return maskMatch((this[0]._valueGet && this[0]._valueGet()) || this[0].value);
-        } else {
-            return this;
+        switch (mode) {
+            case "isCompleted":
+                var res = maskMatch((this[0]._valueGet && this[0]._valueGet()) || this[0].value);
+                return (res && res.completed);
+            default:
+                this.each(function () {
+                    maskInit.call(this);
+                });
+                return this;
         }
     }
 })(jQuery);
