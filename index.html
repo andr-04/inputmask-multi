@@ -64,8 +64,8 @@
                                 replace: '#',
                                 list: maskList,
                                 listKey: "mask",
-                                onMaskChange: function(maskObj, completed) {
-                                    if (completed) {
+                                onMaskChange: function(maskObj, determined) {
+                                    if (determined) {
                                         var hint = maskObj.name_ru;
                                         if (maskObj.desc_ru && maskObj.desc_ru != "") {
                                             hint += " (" + maskObj.desc_ru + ")";
