@@ -177,7 +177,7 @@
                 }
                 if (pass && it==mtxt.length) {
                     var determined = mask.substr(im).search(maskOpts.match) == -1;
-                    mask = mask.replace(new RegExp(maskOpts.match.source, 'g'), maskOpts.replace);
+                    mask = mask.replace(new RegExp([maskOpts.match.source].concat(Object.keys(defs)).join('|'), 'g'), maskOpts.replace);
                     var completed = mask.substr(im).search(maskOpts.replace) == -1;
                     return {
                         mask: mask,
