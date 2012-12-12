@@ -45,7 +45,7 @@
                     <p>Введите произвольный номер телефона в следующее поле ввода:</p>
                     <div class="demo">
                         <input type="text" id="customer_phone" value="7" size="25"><br>
-                        <input type="checkbox" id="phone_mask"><label id="descr" for="phone_mask">Маска ввода</label>
+                        <input type="checkbox" id="phone_mask" checked><label id="descr" for="phone_mask">Маска ввода</label>
                         <script>
                             var maskList = $.masksSort($.masksLoad("phone-codes.json"), ['#'], /[0-9]|#/, "mask");
                             var maskOpts = {
@@ -87,11 +87,6 @@
                                 }
                             });
 			
-                            if ($('#customer_phone').inputmasks(maskOpts, "isCompleted")) {
-                                $('#phone_mask').attr('checked', true);
-                            } else {
-                                $('#phone_mask').attr('checked', false);
-                            }
                             $('#phone_mask').change();
                         </script>
                     </div>
