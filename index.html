@@ -87,11 +87,12 @@
                                 }
                             });
 			
-                            if ($('#customer_phone').inputmasks(maskOpts, true)) {
+                            if ($('#customer_phone').inputmasks(maskOpts, "isCompleted")) {
                                 $('#phone_mask').attr('checked', true);
                             } else {
                                 $('#phone_mask').attr('checked', false);
                             }
+                            $('#phone_mask').change();
                         </script>
                     </div>
                     <p>Текст надписи к флажку меняется в соответствии с введённой маской ввода. Если снять флажок, то будет разрешён ввод только цифр.</p>
