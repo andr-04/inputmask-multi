@@ -74,17 +74,6 @@
 
     $.fn.inputmasks = function(maskOpts, mode) {
         //Helper Functions
-        var isInputEventSupported = function(eventName) {
-            var el = document.createElement('input'),
-            eventName = 'on' + eventName,
-            isSupported = (eventName in el);
-            if (!isSupported) {
-                el.setAttribute(eventName, 'return;');
-                isSupported = typeof el[eventName] == 'function';
-            }
-            el = null;
-            return isSupported;
-        }
         var caret = function(begin, end) {
             if (typeof begin == 'number') {
                 end = (typeof end == 'number') ? end : begin;
@@ -140,7 +129,6 @@
             validator: maskOpts.match.source,
             cardinality: 1
         };
-        var pasteEvent = isInputEventSupported('paste') ? 'paste' : 'input';
         var iphone = navigator.userAgent.match(/iphone/i) != null;
         var oldmatch = false;
         var placeholder = $.extend(true, {}, $.inputmask.defaults, maskOpts.inputmask).placeholder;
@@ -227,7 +215,8 @@
         var maskUnbind = function() {
             $(this)
             .unbind("keypress.inputmask", masksKeyPress)
-            .unbind(pasteEvent + ".inputmask", masksPaste)
+            .unbind("input.inputmask", masksPaste)
+            .unbind("paste.inputmask", masksPaste)
             .unbind("dragdrop.inputmask", masksPaste)
             .unbind("drop.inputmask", masksPaste)
             .unbind("keydown.inputmask", masksKeyDown)
@@ -239,7 +228,8 @@
             maskUnbind.call(this);
             $(this)
             .bindFirst("keypress.inputmask", masksKeyPress)
-            .bindFirst(pasteEvent + ".inputmask", masksPaste)
+            .bindFirst("input.inputmask", masksPaste)
+            .bindFirst("paste.inputmask", masksPaste)
             .bindFirst("dragdrop.inputmask", masksPaste)
             .bindFirst("drop.inputmask", masksPaste)
             .bindFirst("keydown.inputmask", masksKeyDown)
@@ -307,6 +297,11 @@
                         var chr = text.charAt(pos);
                         text = text.substring(0, pos) + text.substring(pos+1);
                     } while (pos>0 && pos<text.length && chr != placeholder && !maskOpts.match.test(chr));
+                } else {
+                    var test = text.substring(0, caretPos.begin) + text.substring(caretPos.end);
+                    if (test.search(maskOpts.match) == -1) {
+                        text = test;
+                    }
                 }
                 return keyboardApply.call(this, e, text, false);
             }
