@@ -52,6 +52,9 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 
                     <p>Введите произвольный номер телефона в следующее поле ввода:</p>
                     <div class="demo">
+                        <input type="radio" name="mode" id="is_world" value="world" checked><label for="is_world">Страны мира</label>
+                        <span style="width: 20px; display: inline-block;"></span>
+                        <input type="radio" name="mode" id="is_russia" value="ru"><label for="is_russia">Города России</label>
                         <input type="text" id="customer_phone" value="7" size="25"><br>
                         <input type="checkbox" id="phone_mask" checked><label id="descr" for="phone_mask">Маска ввода</label>
                         <script>
@@ -85,10 +88,41 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
                                     $(this).attr("placeholder", $(this).inputmask("getemptymask"));
                                 }
                             };
-						
-                            $('#phone_mask').change(function() {
+
+                            var listRU = $.masksSort($.masksLoad("phones-ru.json"), ['#'], /[0-9]|#/, "mask");
+                            var optsRU = {
+                                inputmask: {
+                                    definitions: {
+                                        '#': {
+                                            validator: "[0-9]",
+                                            cardinality: 1
+                                        }
+                                    },
+                                    //clearIncomplete: true,
+                                    showMaskOnHover: false,
+                                    autoUnmask: true
+                                },
+                                match: /[0-9]/,
+                                replace: '#',
+                                list: listRU,
+                                listKey: "mask",
+                                onMaskChange: function(maskObj, determined) {
+                                    if (determined) {
+                                        $("#descr").html(maskObj.city + ", " + maskObj.region);
+                                    } else {
+                                        $("#descr").html("Маска ввода");
+                                    }
+                                    $(this).attr("placeholder", $(this).inputmask("getemptymask"));
+                                }
+                            };
+
+                            $('#phone_mask, input[name="mode"]').change(function() {
                                 if ($('#phone_mask').is(':checked')) {
-                                    $('#customer_phone').inputmasks(maskOpts);
+                                    if ($('#is_world').is(':checked')) {
+                                        $('#customer_phone').inputmasks(maskOpts);
+                                    } else {
+                                        $('#customer_phone').inputmasks(optsRU);
+                                    }
                                 } else {
                                     $('#customer_phone').inputmask("+[####################]", maskOpts.inputmask)
                                     .attr("placeholder", $('#customer_phone').inputmask("getemptymask"));
