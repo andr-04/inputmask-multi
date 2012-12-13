@@ -306,7 +306,7 @@
                         }
                         var chr = text.charAt(pos);
                         text = text.substring(0, pos) + text.substring(pos+1);
-                    } while (pos>0 && pos<text.length && !maskOpts.match.test(chr));
+                    } while (pos>0 && pos<text.length && chr != placeholder && !maskOpts.match.test(chr));
                 }
                 return keyboardApply.call(this, e, text, false);
             }
