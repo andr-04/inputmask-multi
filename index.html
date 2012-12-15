@@ -108,7 +108,11 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
                                 listKey: "mask",
                                 onMaskChange: function(maskObj, determined) {
                                     if (determined) {
-                                        $("#descr").html(maskObj.city + ", " + maskObj.region);
+                                        if (maskObj.type != "mobile") {
+                                            $("#descr").html(maskObj.city + ", " + maskObj.region);
+                                        } else {
+                                            $("#descr").html("мобильные");
+                                        }
                                     } else {
                                         $("#descr").html("Маска ввода");
                                     }
