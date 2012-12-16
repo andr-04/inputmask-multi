@@ -109,7 +109,7 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
                                 onMaskChange: function(maskObj, determined) {
                                     if (determined) {
                                         if (maskObj.type != "mobile") {
-                                            $("#descr").html(maskObj.city + ", " + maskObj.region);
+                                            $("#descr").html(maskObj.city.toString() + " (" + maskObj.region.toString() + ")");
                                         } else {
                                             $("#descr").html("мобильные");
                                         }
