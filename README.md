@@ -1,4 +1,3 @@
-inputmask-multi
 ===============
 Inputmask Multi
 ===============
@@ -65,7 +64,7 @@ All events is handled in the space _inputmask_. It allows to avoid wrong actions
 ## The format of a list of masks
 A list of masks is a Javascript array of objects with equal (or similar) set of properties. At least a property which is contains a mask of input must be available for all objects in array. The name of this property can be vary. The fragment of a list of masks is shown below:
 
-  [
+	[
 	…
 		{ "mask": "+7(###)###-##-##", "cc": "RU", "name_en": "Russia", "desc_en": "", "name_ru": "Россия", "desc_ru": "" },
 		{ "mask": "+250(###)###-###", "cc": "RW", "name_en": "Rwanda", "desc_en": "", "name_ru": "Руанда", "desc_ru": "" },
