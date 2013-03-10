@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="stylesheets/demo.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+        <!--[if lt IE 9]>
+        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+        <script src="javascripts/jquery.inputmask.js" type="text/javascript"></script>
+        <script src="javascripts/jquery.bind-first-0.1.min.js" type="text/javascript"></script>
+        <script src="javascripts/jquery.inputmask-multi.js" type="text/javascript"></script>
+        <title>Inputmask-multi by andr-04</title>
+    </head>
+
+    <body>
+
+<!--LiveInternet counter--><script type="text/javascript"><!--
+new Image().src = "//counter.yadro.ru/hit?r"+
+escape(document.referrer)+((typeof(screen)=="undefined")?"":
+";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+";"+Math.random();//--></script><!--/LiveInternet-->
+        
+        <div id="container">
+            <div class="inner">
+
+                <header>
+                    <div style="
+                        text-align: right;
+                    "><a href="ru.html">Русский</a></div>
+                    <h1>Inputmask-multi</h1>
+                    <h2>Selection of an input mask for a phone number</h2>
+                </header>
+
+                <section id="downloads" class="clearfix">
+                    <a href="https://github.com/andr-04/inputmask-multi/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+                    <a href="https://github.com/andr-04/inputmask-multi/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+                    <a href="https://github.com/andr-04/inputmask-multi" id="view-on-github" class="button"><span>View on GitHub</span></a>
+                </section>
+
+                <hr>
+
+                <section id="main_content">
+                    <h3>Description</h3>
+
+                    <p>This plugin for jQuery which is allow to select fitted mask of input automatically using the prefix of phone number.</p>
+
+                    <h3>The sample of using</h3>
+
+                    <p>Type any phone number to the following input field:</p>
+                    <div class="demo">
+                        <input type="text" id="customer_phone" value="" size="25"><br>
+                        <input type="checkbox" id="phone_mask" checked><label id="descr" for="phone_mask">Маска ввода</label>
+                        <script>
+                            var maskList = $.masksSort($.masksLoad("phone-codes.json"), ['#'], /[0-9]|#/, "mask");
+                            var maskOpts = {
+                                inputmask: {
+                                    definitions: {
+                                        '#': {
+                                            validator: "[0-9]",
+                                            cardinality: 1
+                                        }
+                                    },
+                                    //clearIncomplete: true,
+                                    showMaskOnHover: false,
+                                    autoUnmask: true
+                                },
+                                match: /[0-9]/,
+                                replace: '#',
+                                list: maskList,
+                                listKey: "mask",
+                                onMaskChange: function(maskObj, determined) {
+                                    if (determined) {
+                                        var hint = maskObj.name_en;
+                                        if (maskObj.desc_en && maskObj.desc_en != "") {
+                                            hint += " (" + maskObj.desc_en + ")";
+                                        }
+                                        $("#descr").html(hint);
+                                    } else {
+                                        $("#descr").html("Mask of input");
+                                    }
+                                    $(this).attr("placeholder", $(this).inputmask("getemptymask"));
+                                }
+                            };
+
+                            $('#phone_mask').change(function() {
+                                if ($('#phone_mask').is(':checked')) {
+                                    $('#customer_phone').inputmasks(maskOpts);
+                                } else {
+                                    $('#customer_phone').inputmask("+[####################]", maskOpts.inputmask)
+                                    .attr("placeholder", $('#customer_phone').inputmask("getemptymask"));
+                                    $("#descr").html("Mask of input");
+                                }
+                            });
+			
+                            $('#phone_mask').change();
+                        </script>
+                    </div>
+                    <p>The label of checkbox is changing according the typed phone number. If the checkbox is unmarked only digits are allowed to type.</p>
+                    
+                </section>
+
+                <footer>
+                    Inputmask-multi is maintained by <a href="https://github.com/andr-04">andr-04</a><br>
+                    This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+                </footer>
+
+            </div>
+        </div>
+    </body>
+</html>
