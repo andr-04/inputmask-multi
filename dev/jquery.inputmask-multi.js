@@ -10,6 +10,13 @@
  * https://github.com/private-face/jquery.bind-first
  */
 (function ($) {
+    var keys = Object.keys || function(obj) {
+        if (obj !== Object(obj)) throw new TypeError('Invalid object');
+        var keys = [];
+        for (var key in obj) if (_.has(obj, key)) keys[keys.length] = key;
+        return keys;
+    };
+
     $.masksLoad = function(url) {
         var maskList;
         $.ajax({
@@ -165,7 +172,7 @@
                 }
                 if (pass && it==mtxt.length) {
                     var determined = mask.substr(im).search(maskOpts.match) == -1;
-                    mask = mask.replace(new RegExp([maskOpts.match.source].concat(Object.keys(defs)).join('|'), 'g'), maskOpts.replace);
+                    mask = mask.replace(new RegExp([maskOpts.match.source].concat(keys(defs)).join('|'), 'g'), maskOpts.replace);
                     var completed = mask.substr(im).search(maskOpts.replace) == -1;
                     return {
                         mask: mask,
