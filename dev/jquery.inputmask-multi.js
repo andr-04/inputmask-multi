@@ -351,6 +351,10 @@
         
         var masksPaste = function(e) {
             var input = this;
+            var val = $.trim($(input).val());
+            if (val.length === 11 && val.substr(0, 1) === '8') {
+                $(input).val('+7' + val.substr(1));
+            }
             setTimeout(function() {
                 maskInit.call(input);
             }, 0);
