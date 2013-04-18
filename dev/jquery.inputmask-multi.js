@@ -4,7 +4,7 @@
  * Copyright (c) 2012 Andrey Egorov
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
  * Version: 1.0.0
- * 
+ *
  * Requriements:
  * https://github.com/RobinHerbots/jquery.inputmask
  * https://github.com/private-face/jquery.bind-first
@@ -96,18 +96,29 @@
                     end = begin + range.text.length;
                 }
                 return {
-                    begin: begin, 
+                    begin: begin,
                     end: end
                 };
             }
         };
-        
+
+        var keys = Object.keys || function(obj) {
+            if (obj !== Object(obj)) {
+                throw new TypeError('Invalid object');
+            }
+            var keys = [];
+            for (var key in obj) {
+                keys[keys.length] = key;
+            }
+            return keys;
+        };
+
         maskOpts = $.extend(true, {
             onMaskChange: $.noop
         }, maskOpts);
         var defs = {};
         for (var def in maskOpts.inputmask.definitions) {
-            var validator = maskOpts.inputmask.definitions[def].validator; 
+            var validator = maskOpts.inputmask.definitions[def].validator;
             switch (typeof validator) {
                 case "string":
                     defs[def] = new RegExp(validator);
@@ -132,7 +143,7 @@
         var oldmatch = false;
         var placeholder = $.extend(true, {}, $.inputmask.defaults, maskOpts.inputmask).placeholder;
         var insertMode = $.extend(true, {}, $.inputmask.defaults, maskOpts.inputmask).insertMode;
-        
+
         var maskMatch = function(text) {
             var mtxt = "";
             for (var i=0; i<text.length; i++) {
@@ -164,7 +175,7 @@
                 }
                 if (pass && it==mtxt.length) {
                     var determined = mask.substr(im).search(maskOpts.match) == -1;
-                    mask = mask.replace(new RegExp([maskOpts.match.source].concat(Object.keys(defs)).join('|'), 'g'), maskOpts.replace);
+                    mask = mask.replace(new RegExp([maskOpts.match.source].concat(keys(defs)).join('|'), 'g'), maskOpts.replace);
                     var completed = mask.substr(im).search(maskOpts.replace) == -1;
                     return {
                         mask: mask,
@@ -176,7 +187,7 @@
             }
             return false;
         }
-		
+
         var caretApply = function(oldMask, newMask, oldPos) {
             if (!oldMask) {
                 return 0;
@@ -210,7 +221,7 @@
                 end: endPos
             };
         }
-	
+
         var maskUnbind = function() {
             $(this)
             .unbind("keypress.inputmask", masksKeyPress)
@@ -222,7 +233,7 @@
             .unbind("setvalue.inputmask", masksSetValue)
             .unbind("blur.inputmask", masksChange);
         }
-		
+
         var maskRebind = function() {
             maskUnbind.call(this);
             $(this)
@@ -235,7 +246,7 @@
             .bindFirst("setvalue.inputmask", masksSetValue)
             .bind("blur.inputmask", masksChange);
         }
-		
+
         var maskApply = function(match, newtext) {
             if (match && (newtext || match.mask != oldmatch.mask)) {
                 var caretPos;
@@ -260,7 +271,7 @@
             maskOpts.onMaskChange.call(this, match.obj, match.determined);
             return true;
         }
-        
+
         var keyboardApply = function(e, text, insert) {
             var match = maskMatch(text);
             if (!match || match.obj != oldmatch.obj || match.determined != oldmatch.determined) {
@@ -280,7 +291,7 @@
             }
             return true;
         }
-		
+
         var masksKeyDown = function(e) {
             e = e || window.event;
             var k = e.which || e.charCode || e.keyCode;
@@ -325,13 +336,13 @@
             maskRebind.call(this);
             return true;
         }
-        
+
         var masksSetValue = function(e) {
             maskInit.call(this);
             e.stopImmediatePropagation();
             return true;
         }
-        
+
         var maskInit = function() {
             var text;
             if (this._valueGet) {
@@ -347,7 +358,7 @@
             maskApply.call(this, match, text);
             maskRebind.call(this);
         }
-        
+
         var masksPaste = function(e) {
             var input = this;
             setTimeout(function() {
