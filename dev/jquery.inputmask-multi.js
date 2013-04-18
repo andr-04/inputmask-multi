@@ -113,9 +113,8 @@
                     defs[def] = new RegExp(validator);
                     break;
                 case "object":
-                    if (("test" in opts.definitions[def].validator) && ("source" in opts.definitions[def].validator)) {
+                    if ("test" in maskOpts.definitions[def].validator) {
                         defs[def] = validator;
-                        match.push(validator.source);
                     }
                     break;
                 case "function":
