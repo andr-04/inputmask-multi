@@ -3,7 +3,7 @@
  * https://github.com/andr-04/inputmask-multi
  * Copyright (c) 2012 Andrey Egorov
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Requriements:
  * https://github.com/RobinHerbots/jquery.inputmask
