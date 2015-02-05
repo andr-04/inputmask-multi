@@ -3,13 +3,15 @@
  * https://github.com/andr-04/inputmask-multi
  * Copyright (c) 2012 Andrey Egorov
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * Requriements:
  * https://github.com/RobinHerbots/jquery.inputmask
  * https://github.com/private-face/jquery.bind-first
  */
 (function ($) {
+    var curCC = null;
+
     $.masksLoad = function(url) {
         var maskList;
         $.ajax({
@@ -174,6 +176,7 @@
                     }
                 }
                 if (pass && it==mtxt.length) {
+                    curCC = maskOpts.list[mid].cc;
                     var determined = mask.substr(im).search(maskOpts.match) == -1;
                     mask = mask.replace(new RegExp([maskOpts.match.source].concat(keys(defs)).join('|'), 'g'), maskOpts.replace);
                     var completed = mask.substr(im).search(maskOpts.replace) == -1;
@@ -378,5 +381,9 @@
                 });
                 return this;
         }
+    }
+
+    $.fn.inputmasksCurrentCC = function() {
+      return curCC;
     }
 })(jQuery);
