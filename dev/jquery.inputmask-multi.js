@@ -141,8 +141,8 @@
         };
         var iphone = navigator.userAgent.match(/iphone/i) != null;
         var oldmatch = false;
-        var placeholder = $.extend(true, {}, $.inputmask.defaults, maskOpts.inputmask).placeholder;
-        var insertMode = $.extend(true, {}, $.inputmask.defaults, maskOpts.inputmask).insertMode;
+        var placeholder = $.extend(true, {}, Inputmask.defaults, maskOpts.inputmask).placeholder;
+        var insertMode = $.extend(true, {}, Inputmask.defaults, maskOpts.inputmask).insertMode;
 
         var maskMatch = function(text) {
             var mtxt = "";
@@ -254,8 +254,8 @@
                     caretPos = caretApply(oldmatch.mask, match.mask, caret.call(this));
                 }
                 if (newtext) {
-                    if (this._valueSet) {
-                        this._valueSet(newtext);
+                    if (this.inputmask && this.inputmask._valueSet) {
+                        this.inputmask._valueSet(newtext);
                     } else {
                         this.value = newtext;
                     }
@@ -296,7 +296,7 @@
             e = e || window.event;
             var k = e.which || e.charCode || e.keyCode;
             if (k == 8 || k == 46 || (iphone && k == 127)) { // delete or backspace
-                var text = this._valueGet();
+                var text = this.inputmask._valueGet();
                 var caretPos = caret.call(this);
                 if (caretPos.begin == caretPos.end || (!insertMode && caretPos.begin == caretPos.end-1)) {
                     var pos = caretPos.begin;
@@ -322,7 +322,7 @@
         }
 
         var masksKeyPress = function(e) {
-            var text = this._valueGet();
+            var text = this.inputmask._valueGet();
             e = e || window.event;
             var k = e.which || e.charCode || e.keyCode, c = String.fromCharCode(k);
             caretPos = caret.call(this);
@@ -331,7 +331,7 @@
         }
 
         var masksChange = function(e) {
-            var match = maskMatch(this._valueGet());
+            var match = maskMatch(this.inputmask._valueGet());
             maskApply.call(this, match);
             maskRebind.call(this);
             return true;
@@ -345,8 +345,8 @@
 
         var maskInit = function() {
             var text;
-            if (this._valueGet) {
-                text = this._valueGet();
+            if (this.inputmask && this.inputmask._valueGet) {
+                text = this.inputmask._valueGet();
             } else {
                 text = this.value;
             }
@@ -370,7 +370,7 @@
 
         switch (mode) {
             case "isCompleted":
-                var res = maskMatch((this[0]._valueGet && this[0]._valueGet()) || this[0].value);
+                var res = maskMatch((this[0].inputmask && this[0].inputmask._valueGet()) || this[0].value);
                 return (res && res.completed);
             default:
                 this.each(function () {
