@@ -246,7 +246,7 @@
                     caretPos = caretApply(oldmatch.mask, match.mask, caret.call(this));
                 }
                 if (newtext) {
-                    if (this.inputmask && this.inputmask._valueSet) {
+                    if (this.inputmask) {
                         this.inputmask.remove();
                     }
                     this.value = newtext;
