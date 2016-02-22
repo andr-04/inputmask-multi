@@ -12,8 +12,7 @@
     "several",
     "mask",
     "selection",
-    "jquery-plugin",
-    "ecosystem:jquery"
+    "jquery-plugin"
   ],
   "homepage": "https://github.com/andr-04/inputmask-multi",
   "license": "MIT",
