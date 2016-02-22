@@ -141,8 +141,8 @@
         };
         var iphone = navigator.userAgent.match(/iphone/i) != null;
         var oldmatch = false;
-        var placeholder = $.extend(true, {}, Inputmask.defaults, maskOpts.inputmask).placeholder;
-        var insertMode = $.extend(true, {}, Inputmask.defaults, maskOpts.inputmask).insertMode;
+        var placeholder = $.extend(true, {}, Inputmask.prototype.defaults, maskOpts.inputmask).placeholder;
+        var insertMode = $.extend(true, {}, Inputmask.prototype.defaults, maskOpts.inputmask).insertMode;
 
         var maskMatch = function(text) {
             var mtxt = "";
@@ -223,28 +223,20 @@
         }
 
         var maskUnbind = function() {
-            $(this)
-            .unbind("keypress.inputmask", masksKeyPress)
-            .unbind("input.inputmask", masksPaste)
-            .unbind("paste.inputmask", masksPaste)
-            .unbind("dragdrop.inputmask", masksPaste)
-            .unbind("drop.inputmask", masksPaste)
-            .unbind("keydown.inputmask", masksKeyDown)
-            .unbind("setvalue.inputmask", masksSetValue)
-            .unbind("blur.inputmask", masksChange);
+            $(this).unbind(".inputmasks");
         }
 
         var maskRebind = function() {
             maskUnbind.call(this);
             $(this)
-            .bindFirst("keypress.inputmask", masksKeyPress)
-            .bindFirst("input.inputmask", masksPaste)
-            .bindFirst("paste.inputmask", masksPaste)
-            .bindFirst("dragdrop.inputmask", masksPaste)
-            .bindFirst("drop.inputmask", masksPaste)
-            .bindFirst("keydown.inputmask", masksKeyDown)
-            .bindFirst("setvalue.inputmask", masksSetValue)
-            .bind("blur.inputmask", masksChange);
+            .bindFirst("keypress.inputmasks", masksKeyPress)
+            .bindFirst("input.inputmasks", masksPaste)
+            .bindFirst("paste.inputmasks", masksPaste)
+            .bindFirst("dragdrop.inputmasks", masksPaste)
+            .bindFirst("drop.inputmasks", masksPaste)
+            .bindFirst("keydown.inputmasks", masksKeyDown)
+            .bindFirst("setvalue.inputmasks", masksSetValue)
+            .bind("blur.inputmasks", masksChange);
         }
 
         var maskApply = function(match, newtext) {
@@ -255,10 +247,9 @@
                 }
                 if (newtext) {
                     if (this.inputmask && this.inputmask._valueSet) {
-                        this.inputmask._valueSet(newtext);
-                    } else {
-                        this.value = newtext;
+                        this.inputmask.remove();
                     }
+                    this.value = newtext;
                 }
                 $(this).inputmask(match.mask, $.extend(true, maskOpts.inputmask, {
                     insertMode: insertMode
@@ -374,6 +365,7 @@
                 return (res && res.completed);
             default:
                 this.each(function () {
+                    maskUnbind.call(this);
                     maskInit.call(this);
                 });
                 return this;
