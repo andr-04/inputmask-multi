@@ -1,9 +1,9 @@
 /*
  * @license Multi Input Mask plugin for jquery
  * https://github.com/andr-04/inputmask-multi
- * Copyright (c) 2012 Andrey Egorov
+ * Copyright (c) 2012-2016 Andrey Egorov
  * Licensed under the MIT license (http://www.opensource.org/licenses/mit-license.php)
- * Version: 1.0.2
+ * Version: 1.1.0
  *
  * Requriements:
  * https://github.com/RobinHerbots/jquery.inputmask
