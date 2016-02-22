@@ -11,10 +11,10 @@
         <!--[if lt IE 9]>
         <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
-        <script src="javascripts/jquery.inputmask.js" type="text/javascript"></script>
-        <script src="javascripts/jquery.bind-first-0.1.min.js" type="text/javascript"></script>
-        <script src="javascripts/jquery.inputmask-multi.js" type="text/javascript"></script>
+        <script src="http://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+        <script src="http://cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.2.7/dist/min/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
+        <script src="http://cdn.rawgit.com/private-face/jquery.bind-first/v0.2.3/release/jquery.bind-first-0.2.3.min.js" type="text/javascript"></script>
+        <script src="http://cdn.rawgit.com/andr-04/inputmask-multi/1.1.1/js/jquery.inputmask-multi.min.js" type="text/javascript"></script>
         <title>Inputmask-multi by andr-04</title>
     </head>
 
@@ -31,9 +31,7 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
             <div class="inner">
 
                 <header>
-                    <div style="
-                        text-align: right;
-                    "><a href="en.html">English</a></div>
+                    <div style="text-align: right;"><a href="en.html">English</a></div>
                     <h1>Inputmask-multi</h1>
                     <h2>Подбор маски ввода по номеру телефона</h2>
                 </header>
@@ -60,85 +58,6 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
                         <input type="radio" name="mode" id="is_russia" value="ru"><label for="is_russia">Города России</label>
                         <input type="text" id="customer_phone" value="7" size="25"><br>
                         <input type="checkbox" id="phone_mask" checked><label id="descr" for="phone_mask">Маска ввода</label>
-                        <script>
-                            var maskList = $.masksSort($.masksLoad("phone-codes.json"), ['#'], /[0-9]|#/, "mask");
-                            var maskOpts = {
-                                inputmask: {
-                                    definitions: {
-                                        '#': {
-                                            validator: "[0-9]",
-                                            cardinality: 1
-                                        }
-                                    },
-                                    //clearIncomplete: true,
-                                    showMaskOnHover: false,
-                                    autoUnmask: true
-                                },
-                                match: /[0-9]/,
-                                replace: '#',
-                                list: maskList,
-                                listKey: "mask",
-                                onMaskChange: function(maskObj, determined) {
-                                    if (determined) {
-                                        var hint = maskObj.name_ru;
-                                        if (maskObj.desc_ru && maskObj.desc_ru != "") {
-                                            hint += " (" + maskObj.desc_ru + ")";
-                                        }
-                                        $("#descr").html(hint);
-                                    } else {
-                                        $("#descr").html("Маска ввода");
-                                    }
-                                    $(this).attr("placeholder", $(this).inputmask("getemptymask"));
-                                }
-                            };
-
-                            var listRU = $.masksSort($.masksLoad("phones-ru.json"), ['#'], /[0-9]|#/, "mask");
-                            var optsRU = {
-                                inputmask: {
-                                    definitions: {
-                                        '#': {
-                                            validator: "[0-9]",
-                                            cardinality: 1
-                                        }
-                                    },
-                                    //clearIncomplete: true,
-                                    showMaskOnHover: false,
-                                    autoUnmask: true
-                                },
-                                match: /[0-9]/,
-                                replace: '#',
-                                list: listRU,
-                                listKey: "mask",
-                                onMaskChange: function(maskObj, determined) {
-                                    if (determined) {
-                                        if (maskObj.type != "mobile") {
-                                            $("#descr").html(maskObj.city.toString() + " (" + maskObj.region.toString() + ")");
-                                        } else {
-                                            $("#descr").html("мобильные");
-                                        }
-                                    } else {
-                                        $("#descr").html("Маска ввода");
-                                    }
-                                    $(this).attr("placeholder", $(this).inputmask("getemptymask"));
-                                }
-                            };
-
-                            $('#phone_mask, input[name="mode"]').change(function() {
-                                if ($('#phone_mask').is(':checked')) {
-                                    if ($('#is_world').is(':checked')) {
-                                        $('#customer_phone').inputmasks(maskOpts);
-                                    } else {
-                                        $('#customer_phone').inputmasks(optsRU);
-                                    }
-                                } else {
-                                    $('#customer_phone').inputmask("+[####################]", maskOpts.inputmask)
-                                    .attr("placeholder", $('#customer_phone').inputmask("getemptymask"));
-                                    $("#descr").html("Маска ввода");
-                                }
-                            });
-			
-                            $('#phone_mask').change();
-                        </script>
                     </div>
                     <p>Текст надписи к флажку меняется в соответствии с введённой маской ввода. Если снять флажок, то будет разрешён ввод только цифр.</p>
                     
@@ -153,5 +72,73 @@ screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
 
             </div>
         </div>
+
+        <script>
+            var listCountries = $.masksSort($.masksLoad("http://cdn.rawgit.com/andr-04/inputmask-multi/master/data/phone-codes.json"), ['#'], /[0-9]|#/, "mask");
+            var listRU = $.masksSort($.masksLoad("http://cdn.rawgit.com/andr-04/inputmask-multi/master/data/phones-ru.json"), ['#'], /[0-9]|#/, "mask");
+            var maskOpts = {
+                inputmask: {
+                    definitions: {
+                        '#': {
+                            validator: "[0-9]",
+                            cardinality: 1
+                        }
+                    },
+                    showMaskOnHover: false,
+                    autoUnmask: true,
+                    clearMaskOnLostFocus: false
+                },
+                match: /[0-9]/,
+                replace: '#',
+                listKey: "mask"
+            };
+
+            var maskChangeWorld = function(maskObj, determined) {
+                if (determined) {
+                    var hint = maskObj.name_ru;
+                    if (maskObj.desc_ru && maskObj.desc_ru != "") {
+                        hint += " (" + maskObj.desc_ru + ")";
+                    }
+                    $("#descr").html(hint);
+                } else {
+                    $("#descr").html("Маска ввода");
+                }
+            }
+
+            var maskChangeRU = function(maskObj, determined) {
+                if (determined) {
+                    if (maskObj.type != "mobile") {
+                        $("#descr").html(maskObj.city.toString() + " (" + maskObj.region.toString() + ")");
+                    } else {
+                        $("#descr").html("мобильные");
+                    }
+                } else {
+                    $("#descr").html("Маска ввода");
+                }
+            }
+
+            $('#phone_mask, input[name="mode"]').change(function() {
+                if ($('#phone_mask').is(':checked')) {
+                    $('#customer_phone').inputmask("remove");
+                    if ($('#is_world').is(':checked')) {
+                        $('#customer_phone').inputmasks($.extend(true, {}, maskOpts, {
+                            list: listCountries,
+                            onMaskChange: maskChangeWorld
+                        }));
+                    } else {
+                        $('#customer_phone').inputmasks($.extend(true, {}, maskOpts, {
+                            list: listRU,
+                            onMaskChange: maskChangeRU
+                        }));
+                    }
+                } else {
+                    $('#customer_phone').inputmasks("remove");
+                    $('#customer_phone').inputmask("+#{*}", maskOpts.inputmask);
+                    $("#descr").html("Маска ввода");
+                }
+            });
+
+            $('#phone_mask').change();
+        </script>
     </body>
 </html>
