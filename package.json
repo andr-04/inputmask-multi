@@ -1,6 +1,6 @@
 {
   "name": "inputmask-multi",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "title": "Inputmask Multi",
   "main": "js/jquery.inputmask-multi.js",
   "files": [
