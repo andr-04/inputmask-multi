@@ -206,7 +206,8 @@
         .bindFirst("drop.inputmasks", masksPaste)
         .bindFirst("keydown.inputmasks", masksKeyDown)
         .bindFirst("setvalue.inputmasks", masksSetValue)
-        .bind("blur.inputmasks", masksChange);
+        .bind("blur.inputmasks", masksChange)
+        .bind("cut.inputmasks", masksCut);
     }
 
     var maskApply = function(match, newtext) {
@@ -247,6 +248,8 @@
                     maskApply.call(this, match);
                 }
                 maskRebind.call(this);
+            } else {
+                maskInit.call(this, text);
             }
             e.stopImmediatePropagation();
             return false;
@@ -274,10 +277,7 @@
                     text = text.substring(0, pos) + text.substring(pos+1);
                 } while (pos>0 && pos<text.length && chr != this.inputmasks.placeholder && !maskOpts.match.test(chr));
             } else {
-                var test = text.substring(0, caretPos.begin) + text.substring(caretPos.end);
-                if (test.search(maskOpts.match) == -1) {
-                    text = test;
-                }
+                text = text.substring(0, caretPos.begin) + text.substring(caretPos.end);
             }
             return keyboardApply.call(this, e, text, false);
         }
@@ -295,7 +295,11 @@
         e = e || window.event;
         var k = e.which || e.charCode || e.keyCode, c = String.fromCharCode(k);
         caretPos = caret.call(this);
-        text = text.substring(0, caretPos.begin) + c + text.substring(caretPos.end);
+        if (caretPos.begin == caretPos.end && text.charAt(caretPos.begin) == this.inputmasks.placeholder) {
+            text = text.substring(0, caretPos.begin) + c + text.substring(caretPos.end + 1);
+        } else {
+            text = text.substring(0, caretPos.begin) + c + text.substring(caretPos.end);
+        }
         return keyboardApply.call(this, e, text, true);
     }
 
@@ -312,21 +316,9 @@
         return true;
     }
 
-    var maskInit = function() {
-        var text;
-        if (this.inputmask && this.inputmask._valueGet) {
-            text = this.inputmask._valueGet();
-        } else {
-            text = this.value;
-        }
-        var match = maskMatch.call(this, text);
-        while (!match && text.length>0) {
-            text = text.substr(0, text.length-1);
-            match = maskMatch.call(this, text);
-            changed = true;
-        }
-        maskApply.call(this, match, text);
-        maskRebind.call(this);
+    var masksCut = function(e) {
+        maskInit.call(this);
+        return true;
     }
 
     var masksPaste = function(e) {
@@ -336,6 +328,23 @@
         }, 0);
         e.stopImmediatePropagation();
         return true;
+    }
+
+    var maskInit = function(text) {
+        if (text === undefined) {
+            if (this.inputmask && this.inputmask._valueGet) {
+                text = this.inputmask._valueGet();
+            } else {
+                text = this.value;
+            }
+        }
+        var match = maskMatch.call(this, text);
+        while (!match && text.length>0) {
+            text = text.substr(0, text.length-1);
+            match = maskMatch.call(this, text);
+        }
+        maskApply.call(this, match, text);
+        maskRebind.call(this);
     }
 
     var maskStart = function(maskOpts) {
