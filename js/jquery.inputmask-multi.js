@@ -200,7 +200,7 @@
         maskUnbind.call(this);
         $(this)
         .bindFirst("keypress.inputmasks", masksKeyPress)
-        .bindFirst("input.inputmasks", masksPaste)
+        //.bindFirst("input.inputmasks", masksPaste)
         .bindFirst("paste.inputmasks", masksPaste)
         .bindFirst("dragdrop.inputmasks", masksPaste)
         .bindFirst("drop.inputmasks", masksPaste)
@@ -255,6 +255,9 @@
     }
 
     var masksKeyDown = function(e) {
+        if (e.metaKey) {
+            return true;
+        }
         var maskOpts = this.inputmasks.options;
         e = e || window.event;
         var k = e.which || e.charCode || e.keyCode;
@@ -285,6 +288,9 @@
     }
 
     var masksKeyPress = function(e) {
+        if (e.metaKey) {
+            return true;
+        }
         var text = this.inputmask._valueGet();
         e = e || window.event;
         var k = e.which || e.charCode || e.keyCode, c = String.fromCharCode(k);
@@ -317,6 +323,7 @@
         while (!match && text.length>0) {
             text = text.substr(0, text.length-1);
             match = maskMatch.call(this, text);
+            changed = true;
         }
         maskApply.call(this, match, text);
         maskRebind.call(this);
