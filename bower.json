@@ -23,7 +23,7 @@
   "dependencies": {
     "jquery": ">=1.5",
     "jquery.inputmask": ">=3.2.0",
-    "bind-first": ">=0.1.0"
+    "jquery.bind-first": ">=0.1.0"
   },
   "ignore": [
     "**/.*",
