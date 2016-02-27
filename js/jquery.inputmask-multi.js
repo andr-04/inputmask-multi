@@ -193,21 +193,38 @@
     }
 
     var maskUnbind = function() {
-        $(this).unbind(".inputmasks");
+        $(this).off(".inputmasks");
     }
 
-    var maskRebind = function() {
-        maskUnbind.call(this);
+    var unbindOriginal = function() {
+        events = $._data(this, "events");
+        var types = ["keydown", "keypress", "paste", "dragdrop", "drop", "cut", "setvalue", "blur", "reset"]
+        var that = this;
+        $.each(types, function(idx, evt_name) {
+            $.each(that.inputmask.events[evt_name], function(evt_idx, evt_func) {
+                $(that).off(evt_name, evt_func);
+            });
+        });
+    }
+
+    var runOriginal = function(event) {
+        var that = this;
+        $.each(this.inputmask.events[event.type], function(evt_idx, evt_func) {
+            evt_func.call(that, event);
+        });
+    }
+
+    var maskBind = function() {
         $(this)
-        .bindFirst("keypress.inputmasks", masksKeyPress)
-        //.bindFirst("input.inputmasks", masksPaste)
-        .bindFirst("paste.inputmasks", masksPaste)
-        .bindFirst("dragdrop.inputmasks", masksPaste)
-        .bindFirst("drop.inputmasks", masksPaste)
-        .bindFirst("keydown.inputmasks", masksKeyDown)
-        .bindFirst("setvalue.inputmasks", masksSetValue)
-        .bind("blur.inputmasks", masksChange)
-        .bind("cut.inputmasks", masksCut);
+        .on("keydown.inputmasks", masksKeyDown)
+        .on("keypress.inputmasks", masksKeyPress)
+        .on("paste.inputmasks", masksPaste)
+        .on("dragdrop.inputmasks", masksPaste)
+        .on("drop.inputmasks", masksPaste)
+        .on("cut.inputmasks", masksChange)
+        .on("setvalue.inputmasks", masksChange)
+        .on("blur.inputmasks", masksChange)
+        .on("reset.inputmasks", masksChange);
     }
 
     var maskApply = function(match, newtext) {
@@ -226,39 +243,38 @@
             $(this).inputmask(match.mask, $.extend(true, maskOpts.inputmask, {
                 insertMode: this.inputmasks.insertMode
             }));
+            unbindOriginal.call(this);
             if (newtext === undefined) {
                 caret.call(this, caretPos.begin, caretPos.end);
             }
         }
         this.inputmasks.oldmatch = match;
         maskOpts.onMaskChange.call(this, match.obj, match.determined);
-        return true;
     }
 
     var keyboardApply = function(e, text, insert) {
         var match = maskMatch.call(this, text);
         if (!match || match.obj != this.inputmasks.oldmatch.obj || match.determined != this.inputmasks.oldmatch.determined) {
             if (match) {
-                maskUnbind.call(this);
                 if (insert) {
                     maskApply.call(this, match);
-                    $(this).trigger(e);
+                    runOriginal.call(this, e);
                 } else {
-                    $(this).trigger(e);
+                    runOriginal.call(this, e);
                     maskApply.call(this, match);
                 }
-                maskRebind.call(this);
             } else {
                 maskInit.call(this, text);
             }
-            e.stopImmediatePropagation();
             return false;
         }
+        runOriginal.call(this, e);
         return true;
     }
 
     var masksKeyDown = function(e) {
         if (e.metaKey) {
+            runOriginal.call(this, e);
             return true;
         }
         var maskOpts = this.inputmasks.options;
@@ -267,7 +283,7 @@
         if (k == 8 || k == 46 || (this.inputmasks.iphone && k == 127)) { // delete or backspace
             var text = this.inputmask._valueGet();
             var caretPos = caret.call(this);
-            if (caretPos.begin == caretPos.end || (!this.inputmasks.insertMode && caretPos.begin == caretPos.end-1)) {
+            if (caretPos.begin == caretPos.end) {
                 var pos = caretPos.begin;
                 do {
                     if (k != 46) { // backspace
@@ -284,11 +300,13 @@
         if (k == 45) { // insert
             this.inputmasks.insertMode = !this.inputmasks.insertMode;
         }
+        runOriginal.call(this, e);
         return true;
     }
 
     var masksKeyPress = function(e) {
         if (e.metaKey) {
+            runOriginal.call(this, e);
             return true;
         }
         var text = this.inputmask._valueGet();
@@ -304,20 +322,8 @@
     }
 
     var masksChange = function(e) {
-        var match = maskMatch.call(this, this.inputmask._valueGet());
-        maskApply.call(this, match);
-        maskRebind.call(this);
-        return true;
-    }
-
-    var masksSetValue = function(e) {
         maskInit.call(this);
-        e.stopImmediatePropagation();
-        return true;
-    }
-
-    var masksCut = function(e) {
-        maskInit.call(this);
+        runOriginal.call(this, e);
         return true;
     }
 
@@ -325,8 +331,8 @@
         var input = this;
         setTimeout(function() {
             maskInit.call(input);
+            runOriginal.call(input, e);
         }, 0);
-        e.stopImmediatePropagation();
         return true;
     }
 
@@ -344,7 +350,6 @@
             match = maskMatch.call(this, text);
         }
         maskApply.call(this, match, text);
-        maskRebind.call(this);
     }
 
     var maskStart = function(maskOpts) {
@@ -385,7 +390,7 @@
         this.inputmasks.iphone = navigator.userAgent.match(/iphone/i) != null;
         this.inputmasks.oldmatch = false;
         this.inputmasks.placeholder = maskOpts.inputmask.placeholder || Inputmask.prototype.defaults.placeholder;
-        this.inputmasks.insertMode =  maskOpts.inputmask.insertMode || Inputmask.prototype.defaults.insertMode;
+        this.inputmasks.insertMode = (maskOpts.inputmask.insertMode !== undefined) ? maskOpts.inputmask.insertMode : Inputmask.prototype.defaults.insertMode;
 
         maskInit.call(this);
     }
@@ -403,6 +408,7 @@
             default:
                 this.each(function () {
                     maskStart.call(this, fn);
+                    maskBind.call(this);
                 });
                 return this;
         }
