@@ -233,8 +233,7 @@
             var caretPos;
             if (newtext === undefined) {
                 caretPos = caretApply.call(this, this.inputmasks.oldmatch.mask, match.mask, caret.call(this));
-            }
-            if (newtext !== undefined) {
+            } else {
                 if (this.inputmask) {
                     this.inputmask.remove();
                 }
@@ -264,7 +263,9 @@
                     maskApply.call(this, match);
                 }
             } else {
-                maskInit.call(this, text);
+                if (!insert || !this.inputmasks.insertMode) {
+                    maskInit.call(this, text);
+                }
             }
             return false;
         }
