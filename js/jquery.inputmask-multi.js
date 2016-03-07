@@ -198,7 +198,7 @@
 
     var unbindOriginal = function() {
         events = $._data(this, "events");
-        var types = ["keydown", "keypress", "paste", "dragdrop", "drop", "cut", "setvalue", "blur", "reset"]
+        var types = ["keydown", "keypress", "paste", "dragdrop", "drop", "setvalue", "reset", "cut", "blur"]
         var that = this;
         $.each(types, function(idx, evt_name) {
             $.each(that.inputmask.events[evt_name], function(evt_idx, evt_func) {
@@ -221,7 +221,7 @@
         .on("paste.inputmasks", masksPaste)
         .on("dragdrop.inputmasks", masksPaste)
         .on("drop.inputmasks", masksPaste)
-        .on("cut.inputmasks", masksChange)
+        .on("cut.inputmasks", masksPaste)
         .on("setvalue.inputmasks", masksChange)
         .on("blur.inputmasks", masksChange)
         .on("reset.inputmasks", masksChange);
@@ -324,7 +324,7 @@
 
     var masksChange = function(e) {
         maskInit.call(this);
-        runOriginal.call(this, e);
+        //runOriginal.call(this, e);
         return true;
     }
 
@@ -332,7 +332,7 @@
         var input = this;
         setTimeout(function() {
             maskInit.call(input);
-            runOriginal.call(input, e);
+            //runOriginal.call(input, e);
         }, 0);
         return true;
     }
