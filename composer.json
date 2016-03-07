@@ -1,7 +1,7 @@
 {
   "name": "andr-04/jquery.inputmask-multi",
   "description": "Inputmask Multi is a plugin which allows to select a mask of input basing on the beginning of entered data (such as an international phone number)",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "type": "library",
   "keywords": [
     "inputmask",
