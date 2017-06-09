@@ -22,7 +22,7 @@
   "homepage": "https://github.com/andr-04/inputmask-multi",
   "dependencies": {
     "jquery": ">=1.5",
-    "jquery.inputmask": ">=3.2.0"
+    "inputmask": ">=3.2.0"
   },
   "ignore": [
     "**/.*",
