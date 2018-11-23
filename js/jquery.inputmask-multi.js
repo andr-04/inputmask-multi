@@ -196,7 +196,7 @@
     }
 
     var unbindOriginal = function() {
-        events = $._data(this, "events");
+        var events = $._data(this, "events");
         var types = ["keydown", "keypress", "paste", "dragdrop", "drop", "setvalue", "reset", "cut", "blur"]
         var that = this;
         $.each(types, function(idx, evt_name) {
