@@ -312,7 +312,7 @@
         var text = this.inputmask._valueGet();
         e = e || window.event;
         var k = e.which || e.charCode || e.keyCode, c = String.fromCharCode(k);
-        caretPos = caret.call(this);
+        var caretPos = caret.call(this);
         if (caretPos.begin == caretPos.end && text.charAt(caretPos.begin) == this.inputmasks.placeholder) {
             text = text.substring(0, caretPos.begin) + c + text.substring(caretPos.end + 1);
         } else {
